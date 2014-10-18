@@ -1,0 +1,40 @@
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+
+function drawChart() {
+  var query = new google.visualization.Query("https://docs.google.com/spreadsheets/d/12Pj9w1duhlLXNJ5nCNIw-jWNr_kRwOlQ0Fr0zV5Kbj8/edit#gid=0");
+  query.send(handleQueryResponse);
+	
+  //var query1 = new google.visualization.Query("https://docs.google.com/spreadsheets/d/1VdNqjaHfo7qx3aM0AwxPHVi8pvP1IAq4KovFo7IJJ04/edit#gid=0");
+  //query.send(handleQueryResponse);
+}
+
+function handleQueryResponse(response) {
+
+  var data = response.getDataTable();
+   var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+        chart.draw(data, {vAxes:[
+      {title: 'Title 1', titleTextStyle: {color: '#FF0000'}, maxValue: 5000}, // Left axis
+      {title: 'Title 2', titleTextStyle: {color: '#FF0000'}, maxValue: 40}, // Right axis
+{title: 'Title 3', titleTextStyle: {color: '#FF0000'}, maxValue: 6}, // Right axis
+{title: 'Title 4', titleTextStyle: {color: '#FF0000'}, maxValue: 2} // Right axis
+    ],series:[
+                {targetAxisIndex:1}, //first column is mapped to second title above
+                {targetAxisIndex:2},
+		{targetAxisIndex:3},
+		{targetAxisIndex:0}
+    ],} );
+}
+
+     
+
+    </script>
+  </head>
+  <body>
+    <div id="chart_div" style="width: 1500px; height: 800px;"></div>
+  </body>
+</html>

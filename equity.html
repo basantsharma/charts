@@ -1,0 +1,89 @@
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+var dataeq;
+var datape;
+var monthNames = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
+function drawChart() {
+  var query = new google.visualization.Query("https://docs.google.com/spreadsheets/d/1_0ZlTGjHdNVih65rE5tSNVVZLvlHogGWSFPHgNtEfW0/edit#gid=0");
+  query.send(seteq);
+	
+  
+
+ 
+}
+
+function seteq(response){
+dataeq = response;
+var query1 = new google.visualization.Query("https://docs.google.com/spreadsheets/d/1VdNqjaHfo7qx3aM0AwxPHVi8pvP1IAq4KovFo7IJJ04/edit#gid=0");
+  query1.send(setpe);
+}
+
+function setpe(response) {
+datape = response;
+createtable();
+}
+
+function createtable() {
+var a = new Array();
+datape.t.tf.forEach(function(entry) {
+	a[entry.c[0].v] = entry.c[1].v;
+});
+
+var data3 = new google.visualization.DataTable();
+data3.addColumn('date','date');
+data3.addColumn('number','PE');
+data3.addColumn('number','Price');
+data3.addColumn('number','EPS');
+
+dataeq.t.tf.forEach(function(entry) {
+	d = entry.c[0].v;
+	 var year = d.getFullYear();
+	 year = year.toString().substr(2,2);
+	var mon = d.getMonth();
+	if (mon < 3) {
+          mon = "Mar";
+	}
+	else if (mon < 6){
+          mon = "Jun";
+	}
+	else if (mon < 9){
+          mon = "Sep";
+	}
+	else {
+          mon = "Dec";
+	}
+	var key = mon + year;
+	
+	data3.addRow([entry.c[0].v,entry.c[1].v/(a[key]*4),entry.c[1].v,a[key]]);
+
+
+	});
+
+var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+        chart.draw(data3, {vAxes:[
+      {title: 'Title 1', titleTextStyle: {color: '#FF0000'}, maxValue: 700}, // Left axis
+      {title: 'Title 2', titleTextStyle: {color: '#FF0000'}, maxValue: 35}, // Right axis
+      {title: 'Title 3', titleTextStyle: {color: '#FF0000'}, maxValue: 20}, // Right axis
+    ],series:[
+                {targetAxisIndex:1}, //first column is mapped to second title above
+                {targetAxisIndex:0},
+		{targetAxisIndex:2}
+    ],} );
+  
+
+}
+
+
+
+
+    </script>
+  </head>
+  <body>
+    <div id="chart_div" style="width: 1500px; height: 800px;"></div>
+  </body>
+</html>
